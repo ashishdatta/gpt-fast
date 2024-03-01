@@ -350,11 +350,10 @@ def main(
 
     # tokenizer = SentencePieceProcessor(model_file=str(tokenizer_path))
     tokenizer = AutoTokenizer.from_pretrained(
-        "stabilityai/stablelm-2-zephyr-1_6b", trust_remote_code=True
+        "stabilityai/stablelm-2-1_6b", trust_remote_code=True
     )
     encoded = encode_tokens(tokenizer, prompt, bos=True, device=device)
     prompt_length = encoded["input_ids"].size(1)
-    print(prompt_length)
 
     torch.manual_seed(1234)
     model_size = sum(

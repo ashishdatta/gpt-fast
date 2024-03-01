@@ -25,6 +25,7 @@ def load_model(path, config):
 
     state_dict = safe_open(str(path), framework="pt", device="cpu")
     state_dict = {k: state_dict.get_tensor(k) for k in state_dict.keys()}
+    # TODO Add back in bias terms
     weight_map = {
         "model.embed_tokens.weight": "tok_embeddings.weight",
         "model.layers.{}.self_attn.q_proj.weight": "layers.{}.attention.wq.weight",
@@ -49,7 +50,6 @@ def load_model(path, config):
 
     def permute(w, n_head):
         dim = config.dim
-        print(w)
         w = (
             w.view(n_head, 2, config.head_dim // 2, dim)
             .transpose(1, 2)
@@ -69,9 +69,6 @@ def load_model(path, config):
         else:
             new_key = weight_map[key]
         final_result[new_key] = value
-    print(final_result)
-    if "output.weight" not in final_result:
-        final_result["output.weight"] = final_result["tok_embeddings.weight"]
     return final_result
 
 

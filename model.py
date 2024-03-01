@@ -90,7 +90,7 @@ transformer_configs = {
         intermediate_size=14336,
         vocab_size=32000,
     ),
-    "stablelm-2-zephyr-1_6b": dict(
+    "stablelm-2-1_6b": dict(
         block_size=4096,
         n_layer=24,
         n_head=32,
