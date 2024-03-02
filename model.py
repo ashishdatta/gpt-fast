@@ -91,7 +91,7 @@ transformer_configs = {
         vocab_size=32000,
     ),
     "stablelm-2-1_6b": dict(
-        block_size=4096,
+        #   block_size=4096,
         n_layer=24,
         n_head=32,
         dim=2048,
@@ -207,7 +207,7 @@ class Attention(nn.Module):
 
         total_head_dim = (config.n_head + 2 * config.n_local_heads) * config.head_dim
         # key, query, value projections for all heads, but in a batch
-        self.wqkv = nn.Linear(config.dim, total_head_dim, bias=False)
+        self.wqkv = nn.Linear(config.dim, total_head_dim, bias=True)
         self.wo = nn.Linear(config.dim, config.dim, bias=False)
         self.kv_cache = None
 
@@ -222,7 +222,11 @@ class Attention(nn.Module):
             wq = state_dict.pop(prefix + "wq.weight")
             wk = state_dict.pop(prefix + "wk.weight")
             wv = state_dict.pop(prefix + "wv.weight")
+            bq = state_dict.pop(prefix + "wq.bias")
+            bk = state_dict.pop(prefix + "wk.bias")
+            bv = state_dict.pop(prefix + "wv.bias")
             state_dict[prefix + "wqkv.weight"] = torch.cat([wq, wk, wv])
+            state_dict[prefix + "wqkv.bias"] = torch.cat([bq, bk, bv])
 
     def forward(
         self,
