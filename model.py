@@ -91,10 +91,10 @@ transformer_configs = {
         vocab_size=32000,
     ),
     "stablelm-2-1_6b": dict(
-        #   block_size=4096,
+        block_size=4096,
         n_layer=24,
         n_head=32,
-        dim=2048,
+        dim=2560,
         intermediate_size=5632,
         vocab_size=100352,
     ),
@@ -239,7 +239,7 @@ class Attention(nn.Module):
 
         kv_size = self.n_local_heads * self.head_dim
         q, k, v = self.wqkv(x).split([self.dim, kv_size, kv_size], dim=-1)
-
+        breakpoint()
         q = q.view(bsz, seqlen, self.n_head, self.head_dim)
         k = k.view(bsz, seqlen, self.n_local_heads, self.head_dim)
         v = v.view(bsz, seqlen, self.n_local_heads, self.head_dim)
