@@ -349,9 +349,8 @@ def main(
     print(f"Time to load model: {time.time() - t0:.02f} seconds")
 
     # tokenizer = SentencePieceProcessor(model_file=str(tokenizer_path))
-    tokenizer = AutoTokenizer.from_pretrained(
-        "stabilityai/stablelm-2-1_6b", trust_remote_code=True
-    )
+    tokenizer = AutoTokenizer.from_pretrained("stabilityai/stablelm-2-1_6b")
+    tokenizer.add_special_tokens({"pad_token": "[PAD]"})
     encoded = encode_tokens(tokenizer, prompt, bos=True, device=device)
     prompt_length = encoded["input_ids"].size(1)
 
